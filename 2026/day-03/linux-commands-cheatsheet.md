@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ## 1. Process Management Commands
 =======
 # Day 03 – Linux Command Cheat Sheet (DevOps Toolkit)
@@ -14,6 +15,9 @@ This is a reusable command toolkit for daily DevOps work.
 
 ## 1. Process Management
 >>>>>>> d8e56fa (day 03: linux-cheat-sheet)
+=======
+## 1. Process Management Commands
+>>>>>>> ec5ce30 (Revise Linux command cheat sheet for clarity and completeness)
 
 - `ps aux` – Show all running processes with CPU and memory usage  
 - `ps a` – Show processes associated with the terminal  
@@ -33,12 +37,18 @@ This is a reusable command toolkit for daily DevOps work.
 
 - `pwd` – Show current working directory  
 <<<<<<< HEAD
+<<<<<<< HEAD
 - `ls` – List files and directories  
 - `ls -l` – List files with permissions and ownership  
 - `ls -a` – List all files including hidden files (`.` files)  
 =======
 - `ls -l` – List files with permissions and ownership  
 >>>>>>> d8e56fa (day 03: linux-cheat-sheet)
+=======
+- `ls` – List files and directories  
+- `ls -l` – List files with permissions and ownership  
+- `ls -a` – List all files including hidden files (`.` files)  
+>>>>>>> ec5ce30 (Revise Linux command cheat sheet for clarity and completeness)
 - `ls -lh` – List files with human-readable sizes  
 - `cd /path` – Change directory  
 - `mkdir devops` – Create a directory  
@@ -53,6 +63,9 @@ This is a reusable command toolkit for daily DevOps work.
 ---
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ec5ce30 (Revise Linux command cheat sheet for clarity and completeness)
 ## 3. Pipe Symbol (`|`) – Very Important
 
 - `|` is called a **pipe**
@@ -71,9 +84,12 @@ This is a reusable command toolkit for daily DevOps work.
 ---
 
 ## 4. Networking Troubleshooting Commands
+<<<<<<< HEAD
 =======
 ## 3. Networking Troubleshooting
 >>>>>>> d8e56fa (day 03: linux-cheat-sheet)
+=======
+>>>>>>> ec5ce30 (Revise Linux command cheat sheet for clarity and completeness)
 
 - `ip addr` – Display IP addresses and interfaces  
 - `ip route` – Show routing table  
@@ -85,6 +101,9 @@ This is a reusable command toolkit for daily DevOps work.
 ---
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ec5ce30 (Revise Linux command cheat sheet for clarity and completeness)
 ## 5. Log Checking Commands (Very Important for DevOps)
 
 ### Application & System Logs
@@ -103,9 +122,12 @@ This is a reusable command toolkit for daily DevOps work.
 ---
 
 ## 6. Help & Documentation
+<<<<<<< HEAD
 =======
 ## 4. Help & Documentation
 >>>>>>> d8e56fa (day 03: linux-cheat-sheet)
+=======
+>>>>>>> ec5ce30 (Revise Linux command cheat sheet for clarity and completeness)
 
 - `man <command>` – Open official manual page  
 - `<command> --help` – Quick usage reference  
@@ -115,12 +137,16 @@ This is a reusable command toolkit for daily DevOps work.
 ## Why This Matters for DevOps
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ec5ce30 (Revise Linux command cheat sheet for clarity and completeness)
 - Logs are the **first place to check during incidents**
 - Pipes help filter large outputs quickly
 - These commands reduce debugging time
 - Used daily on production Linux servers
 
 Mastering this toolkit makes Linux predictable and controllable.  
+<<<<<<< HEAD
 
 =======
 - Faster troubleshooting during incidents  
@@ -130,3 +156,6 @@ Mastering this toolkit makes Linux predictable and controllable.
 
 Mastering these commands makes Linux predictable and controllable.
 >>>>>>> d8e56fa (day 03: linux-cheat-sheet)
+=======
+
+>>>>>>> ec5ce30 (Revise Linux command cheat sheet for clarity and completeness)
