@@ -1,15 +1,4 @@
-# Day 03 – Linux Command Cheat Sheet (DevOps Toolkit)
-
-This cheat sheet contains frequently used Linux commands for:
-- Process management
-- File system operations
-- Networking troubleshooting
-
-This is a reusable command toolkit for daily DevOps work.
-
----
-
-## 1. Process Management
+## 1. Process Management Commands
 
 - `ps aux` – Show all running processes with CPU and memory usage  
 - `ps a` – Show processes associated with the terminal  
@@ -28,7 +17,9 @@ This is a reusable command toolkit for daily DevOps work.
 ## 2. File System Commands
 
 - `pwd` – Show current working directory  
+- `ls` – List files and directories  
 - `ls -l` – List files with permissions and ownership  
+- `ls -a` – List all files including hidden files (`.` files)  
 - `ls -lh` – List files with human-readable sizes  
 - `cd /path` – Change directory  
 - `mkdir devops` – Create a directory  
@@ -42,7 +33,24 @@ This is a reusable command toolkit for daily DevOps work.
 
 ---
 
-## 3. Networking Troubleshooting
+## 3. Pipe Symbol (`|`) – Very Important
+
+- `|` is called a **pipe**
+- It sends output of one command as input to another command
+
+### Where and Why to Use Pipe
+- To filter output
+- To search logs or processes
+- To avoid large unreadable output
+
+### Examples
+- `ps aux | grep docker` – Find docker process  
+- `ls -l | grep ".log"` – Find log files  
+- `cat file.txt | grep error` – Search error in file  
+
+---
+
+## 4. Networking Troubleshooting Commands
 
 - `ip addr` – Display IP addresses and interfaces  
 - `ip route` – Show routing table  
@@ -53,7 +61,24 @@ This is a reusable command toolkit for daily DevOps work.
 
 ---
 
-## 4. Help & Documentation
+## 5. Log Checking Commands (Very Important for DevOps)
+
+### Application & System Logs
+- `ls /var/log` – List available log files  
+- `cat /var/log/syslog` – View system log (Ubuntu/Debian)  
+- `cat /var/log/messages` – View system log (RHEL/CentOS)  
+
+### Service Logs (systemd)
+- `journalctl` – View all system logs  
+- `journalctl -u nginx` – View logs for a specific service  
+- `journalctl -xe` – View recent errors  
+
+### Live Log Monitoring
+- `tail -f /var/log/syslog` – Watch logs in real time  
+
+---
+
+## 6. Help & Documentation
 
 - `man <command>` – Open official manual page  
 - `<command> --help` – Quick usage reference  
@@ -62,9 +87,10 @@ This is a reusable command toolkit for daily DevOps work.
 
 ## Why This Matters for DevOps
 
-- Faster troubleshooting during incidents  
-- Better understanding of system health  
-- Reduced downtime in production  
-- Strong foundation for automation and scripting  
+- Logs are the **first place to check during incidents**
+- Pipes help filter large outputs quickly
+- These commands reduce debugging time
+- Used daily on production Linux servers
 
-Mastering these commands makes Linux predictable and controllable.
+Mastering this toolkit makes Linux predictable and controllable.  
+
