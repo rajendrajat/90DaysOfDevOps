@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> bf70314 (Revise Linux practice document for processes and logs)
 # Day 04 – Linux Practice: Processes, Services, and Logs
 
 This document captures hands-on Linux practice focused on **process monitoring, service inspection, and log analysis**.
@@ -125,6 +128,7 @@ Observations:
 - systemctl helps monitor service health
 - Logs are critical for troubleshooting
 - Process and log checks are daily DevOps tasks
+<<<<<<< HEAD
 =======
 **top is a Linux command used for real-time system monitoring. It shows CPU usage, memory usage, and running processes.**
 <img width="1098" height="637" alt="image" src="https://github.com/user-attachments/assets/9215fe88-f410-4e23-a5ec-e87a1490e59e" />
@@ -134,3 +138,5 @@ Observations:
 <img width="1217" height="1017" alt="image" src="https://github.com/user-attachments/assets/363ada50-f7c6-4422-8a56-087bd6298b7f" />
 <img width="1892" height="378" alt="image" src="https://github.com/user-attachments/assets/6c638181-8074-4720-9adc-34e01567e619" />
 >>>>>>> 88d0a9f (Add Linux command usage details to linux-practice.md)
+=======
+>>>>>>> bf70314 (Revise Linux practice document for processes and logs)
