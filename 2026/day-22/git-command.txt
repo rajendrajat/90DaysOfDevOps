@@ -1,0 +1,17 @@
+root@openclaw1:/home/ubuntu/devops-git-practice# cat git-commands.md
+### task - 01
+git --version
+git config global user.name "rajendra jat"
+git config global user.email "rajendrajat022@gmail.com"
+git status
+
+
+### task - 02
+mkdir devops-git-practice
+git init
+git status
+ls -a
+git checkout -b branch name
+git checkout test
+git log
+git remote -v
