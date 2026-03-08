@@ -67,6 +67,7 @@ polkitd:x:997:997:User for polkitd:/:/usr/sbin/nologin
 
 ### Task 3: Initial Permissions (after `ls -l`)
 ```
+<<<<<<< HEAD
 -rw-rw-r-- 1 rajen rajen  0  devops.txt   → 664
 -rw-rw-r-- 1 rajen rajen 46  notes.txt    → 664
 -rw-rw-r-- 1 rajen rajen 20  script.sh    → 664
@@ -80,6 +81,16 @@ drwxrwxr-x 3 rajen rajen 4096 tws10       → 775
 - No new file has execute permission yet
 
 > 💡 **Why `664` and not `644`?** Your system uses `umask 002` instead of the common `umask 022`. This means group write permission is granted by default. You can check with: `umask`
+=======
+-rw-r--r-- 1 root root  0  devops.txt   → 644
+-rw-r--r-- 1 root root 55  notes.txt    → 644
+-rw-r--r-- 1 root root 20  script.sh    → 644
+```
+- **Owner (root):** can read + write
+- **Group:** can read only
+- **Others:** can read only
+- No file has execute permission yet
+>>>>>>> cd278c2 (added day 10 updated file)
 
 ---
 
