@@ -67,14 +67,19 @@ polkitd:x:997:997:User for polkitd:/:/usr/sbin/nologin
 
 ### Task 3: Initial Permissions (after `ls -l`)
 ```
--rw-r--r-- 1 root root  0  devops.txt   → 644
--rw-r--r-- 1 root root 55  notes.txt    → 644
--rw-r--r-- 1 root root 20  script.sh    → 644
+-rw-rw-r-- 1 rajen rajen  0  devops.txt   → 664
+-rw-rw-r-- 1 rajen rajen 46  notes.txt    → 664
+-rw-rw-r-- 1 rajen rajen 20  script.sh    → 664
+-rwxr-xr-x 1 rajen rajen 81  sysinfo.sh   → 755
+drwxrwxr-x 3 rajen rajen 4096 tws10       → 775
 ```
-- **Owner (root):** can read + write
-- **Group:** can read only
+- **Owner (rajen):** can read + write on all files
+- **Group (rajen):** can read + write (note: `664` not `644` — your system's default `umask` is `002`)
 - **Others:** can read only
-- No file has execute permission yet
+- `sysinfo.sh` already has execute permission (pre-existing file)
+- No new file has execute permission yet
+
+> 💡 **Why `664` and not `644`?** Your system uses `umask 002` instead of the common `umask 022`. This means group write permission is granted by default. You can check with: `umask`
 
 ---
 
