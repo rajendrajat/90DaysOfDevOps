@@ -1,35 +1,49 @@
 # Day 11 – File Ownership (chown & chgrp)
 
-## Files & Directories Created
-
-| File / Directory | Purpose |
-|-----------------|---------|
-| `devops-file.txt` | Practice chown (user change) |
-| `team-notes.txt` | Practice chgrp (group change) |
-| `project-config.yaml` | Practice combined owner:group change |
-| `app-logs/` | Practice chown on a directory |
-| `heist-project/vault/gold.txt` | Practice recursive chown |
-| `heist-project/plans/strategy.conf` | Practice recursive chown |
-| `bank-heist/access-codes.txt` | Final challenge – tokyo:vault-team |
-| `bank-heist/blueprints.pdf` | Final challenge – berlin:tech-team |
-| `bank-heist/escape-plan.txt` | Final challenge – nairobi:vault-team |
+> **Challenge:** Master file and directory ownership in Linux using `chown` and `chgrp`
 
 ---
 
-## Users & Groups Created
+## What is File Ownership in Linux?
+
+Every file in Linux has **two ownership attributes**:
+
+| Attribute | Meaning                                           | Real-world Example                        |
+| --------- | ------------------------------------------------- | ----------------------------------------- |
+| **Owner** | The individual user who created/controls the file | `rajen` owns his home directory files     |
+| **Group** | A team of users who share access to the file      | `developers` group can read project files |
+
+When you run `ls -l`, the output looks like:
+
+```
+-rw-r--r-- 1 rajen rajen 46 Mar 10 notes.txt
+              │     │
+              │     └── Group
+              └───────── Owner
+```
+
+---
+
+## Users & Groups Setup
+
+### Users Present on System
 
 ```bash
-# Users
-sudo useradd tokyo
-sudo useradd berlin
-sudo useradd nairobi
-sudo useradd professor
+$ cat /etc/passwd | grep -v nologin
+rajen:x:1000:1000:rajen:/home/rajen:/bin/bash
+tokyo:x:1001:1001::/home/tokyo:/bin/sh
+berlin:x:1002:1002::/home/berlin:/bin/sh
+professor:x:1003:1003::/home/professor:/bin/sh
+nairobi:x:1004:1004::/home/nairobi:/bin/sh
+```
 
-# Groups
-sudo groupadd heist-team
-sudo groupadd planners
-sudo groupadd vault-team
-sudo groupadd tech-team
+### Groups Created for This Challenge
+
+```bash
+sudo groupadd heist-team    # GID 1009
+sudo groupadd planners      # GID 1010
+sudo groupadd vault-team    # GID 1011
+sudo groupadd tech-team     # GID 1012
 ```
 
 ---
@@ -37,156 +51,238 @@ sudo groupadd tech-team
 ## Task 1: Understanding Ownership
 
 ```bash
-ls -l
+ls -l /home/rajen
 ```
 
 **Output:**
+
 ```
--rw-r--r-- 1 rajen rajen  46 Mar  8 notes.txt
--rwxr-xr-x 1 rajen rajen  20 Mar  8 script.sh
+-rw-rw-r-- 1 rajen rajen   0  Mar 10  devops-file.txt
+-rw-rw-r-- 1 rajen rajen  46  Mar 10  notes.txt
+-rwxr-xr-x 1 rajen rajen  81  Feb 28  sysinfo.sh
+drwxrwxr-x 3 rajen rajen  4096 Mar 7  tws10
 ```
 
-**Format breakdown:**
-```
--rw-r--r--  1  rajen  rajen  46  Mar 8  notes.txt
-│           │  │      │
-│           │  │      └── Group  → who the file belongs to (team access)
-│           │  └───────── Owner  → the user who created/owns the file
-│           └──────────── Hard link count
-└──────────────────────── Permissions
-```
+**Key Observations:**
 
-| Concept | Meaning |
-|---------|---------|
-| **Owner** | The individual user responsible for the file. Has the most control. |
-| **Group** | A collection of users. Useful for shared team access without giving full ownership. |
+- All files owned by `rajen:rajen` — user and group are the same (typical for personal machines)
+- `sysinfo.sh` has execute permission (`x`) — it's a runnable script
+- Default permissions on new files are `664` (not `644`) because system `umask` is `002`
 
-> In DevOps: a web server file might be owned by `www-data` (owner) and belong to `developers` (group) — so devs can read logs but only the service can write them.
+> 💡 **Real DevOps scenario:** On a production server, `/var/www/html/` might be owned by `www-data:www-data`. Your deploy script needs to either run as that user or be in that group to update files.
 
 ---
 
-## Task 2: chown Operations
+## Task 2: chown – Change Owner Only
 
 ```bash
+# Create file
 touch devops-file.txt
+
+# Check initial ownership
+ls -l devops-file.txt
+# -rw-rw-r-- 1 rajen rajen 0 Mar 10 devops-file.txt
+
+# Change owner to tokyo
 sudo chown tokyo devops-file.txt
+ls -l devops-file.txt
+# -rw-rw-r-- 1 tokyo rajen 0 Mar 10 devops-file.txt
+
+# Change owner to berlin
 sudo chown berlin devops-file.txt
+ls -l devops-file.txt
+# -rw-rw-r-- 1 berlin rajen 0 Mar 10 devops-file.txt
 ```
 
-| Step | Command | Result |
-|------|---------|--------|
-| Initial | — | `-rw-r--r-- 1 root root` |
-| Change to tokyo | `sudo chown tokyo devops-file.txt` | `-rw-r--r-- 1 tokyo root` |
-| Change to berlin | `sudo chown berlin devops-file.txt` | `-rw-r--r-- 1 berlin root` |
+**Before → After:**
 
-> Note: Group stayed as `root` — `chown username` only changes the owner, not the group.
+```
+rajen:rajen  →  tokyo:rajen  →  berlin:rajen
+```
+
+> ⚠️ Notice: Group stayed as `rajen` — `chown username` only changes the **owner**, not the group.
 
 ---
 
-## Task 3: chgrp Operations
+## Task 3: chgrp – Change Group Only
 
 ```bash
+# Create file
 touch team-notes.txt
-sudo groupadd heist-team
+
+# Check initial state
+ls -l team-notes.txt
+# -rw-rw-r-- 1 rajen rajen 0 Mar 10 team-notes.txt
+
+# Change group to heist-team
 sudo chgrp heist-team team-notes.txt
+
+# Verify
+ls -l team-notes.txt
+# -rw-rw-r-- 1 rajen heist-team 0 Mar 10 team-notes.txt
 ```
 
-| Step | Before | After |
-|------|--------|-------|
-| `team-notes.txt` | `root root` | `root heist-team` |
+**Before → After:**
 
-> Note: Owner stayed `root` — `chgrp` only changes the group.
+```
+rajen:rajen  →  rajen:heist-team
+```
+
+> ⚠️ Notice: Owner stayed as `rajen` — `chgrp` only changes the **group**.
+
+> 💡 **Real DevOps scenario:** A log file owned by `app-user` but group changed to `developers` lets the dev team `tail -f` logs without giving them full ownership of the application files.
 
 ---
 
 ## Task 4: Combined Owner & Group Change
 
+### File: project-config.yaml
+
 ```bash
 touch project-config.yaml
+
+# Before
+ls -l project-config.yaml
+# -rw-rw-r-- 1 rajen rajen 0 Mar 10 project-config.yaml
+
+# Change both owner AND group in one command
 sudo chown professor:heist-team project-config.yaml
 
-mkdir app-logs/
-sudo chown berlin:heist-team app-logs/
+# After
+ls -l project-config.yaml
+# -rw-rw-r-- 1 professor heist-team 0 Mar 10 project-config.yaml
 ```
 
-| File | Before | After |
-|------|--------|-------|
-| `project-config.yaml` | `root:root` | `professor:heist-team` |
-| `app-logs/` | `root:root` | `berlin:heist-team` |
+### Directory: app-logs/
 
-**Syntax:** `sudo chown owner:group filename` — changes both in a single command ✅
+```bash
+mkdir app-logs/
+
+# Before
+ls -ld app-logs/
+# drwxrwxr-x 2 rajen rajen 4096 Mar 10 app-logs/
+
+# Change both owner and group
+sudo chown berlin:heist-team app-logs/
+
+# After
+ls -ld app-logs/
+# drwxrwxr-x 2 berlin heist-team 4096 Mar 10 app-logs/
+```
+
+**Summary:**
+
+| Resource              | Before        | After                  |
+| --------------------- | ------------- | ---------------------- |
+| `project-config.yaml` | `rajen:rajen` | `professor:heist-team` |
+| `app-logs/`           | `rajen:rajen` | `berlin:heist-team`    |
+
+> 💡 **Syntax:** `sudo chown owner:group filename` — the `:` separator is what makes it change both at once.
 
 ---
 
-## Task 5: Recursive Ownership
+## Task 5: Recursive Ownership with -R
 
 ```bash
-mkdir -p heist-project/vault heist-project/plans
+# Create directory structure
+mkdir -p heist-project/vault
+mkdir -p heist-project/plans
 touch heist-project/vault/gold.txt
 touch heist-project/plans/strategy.conf
-
-sudo groupadd planners
-sudo chown -R professor:planners heist-project/
 ```
 
 **Before (`ls -lR heist-project/`):**
+
 ```
 heist-project/:
-drwxr-xr-x 2 root root 4096  plans/
-drwxr-xr-x 2 root root 4096  vault/
+drwxr-xr-x 2 root root 4096 Mar 10 plans/
+drwxr-xr-x 2 root root 4096 Mar 10 vault/
 
 heist-project/plans:
--rw-r--r-- 1 root root 0  strategy.conf
+-rw-r--r-- 1 root root 0 Mar 10 strategy.conf
 
 heist-project/vault:
--rw-r--r-- 1 root root 0  gold.txt
+-rw-r--r-- 1 root root 0 Mar 10 gold.txt
 ```
 
-**After (`sudo chown -R professor:planners heist-project/`):**
+```bash
+# Apply recursive ownership change
+sudo chown -R professor:planners heist-project/
+```
+
+**After (`ls -lR heist-project/`):**
+
 ```
 heist-project/:
-drwxr-xr-x 2 professor planners 4096  plans/
-drwxr-xr-x 2 professor planners 4096  vault/
+drwxr-xr-x 2 professor planners 4096 Mar 10 plans/
+drwxr-xr-x 2 professor planners 4096 Mar 10 vault/
 
 heist-project/plans:
--rw-r--r-- 1 professor planners 0  strategy.conf
+-rw-r--r-- 1 professor planners 0 Mar 10 strategy.conf
 
 heist-project/vault:
--rw-r--r-- 1 professor planners 0  gold.txt
+-rw-r--r-- 1 professor planners 0 Mar 10 gold.txt
 ```
 
-> `-R` flag applied ownership change to the parent directory **and** all files/subdirectories inside it recursively.
+**What `-R` does:**
+
+| Without `-R`                         | With `-R`                                  |
+| ------------------------------------ | ------------------------------------------ |
+| Only `heist-project/` itself changes | Parent + ALL subfolders + ALL files change |
+
+> ⚠️ **Production Warning:** Never run `sudo chown -R user:group /` or on system directories like `/etc`, `/var`. It will break your entire OS. Always double-check the path!
+
+> 💡 **Real DevOps scenario:** After deploying a Node.js app, you'd run `sudo chown -R nodejs:nodejs /opt/myapp/` so the service process has full ownership of its own files.
 
 ---
 
 ## Task 6: Practice Challenge – bank-heist/
 
 ```bash
-mkdir -p bank-heist
-touch bank-heist/access-codes.txt bank-heist/blueprints.pdf bank-heist/escape-plan.txt
+# Create structure
+mkdir bank-heist
+touch bank-heist/access-codes.txt
+touch bank-heist/blueprints.pdf
+touch bank-heist/escape-plan.txt
 
+# Before
+ls -l bank-heist/
+# -rw-rw-r-- 1 rajen rajen 0 Mar 10 access-codes.txt
+# -rw-rw-r-- 1 rajen rajen 0 Mar 10 blueprints.pdf
+# -rw-rw-r-- 1 rajen rajen 0 Mar 10 escape-plan.txt
+
+# Assign different ownership to each file
 sudo chown tokyo:vault-team   bank-heist/access-codes.txt
 sudo chown berlin:tech-team   bank-heist/blueprints.pdf
 sudo chown nairobi:vault-team bank-heist/escape-plan.txt
+
+# Verify
+ls -l bank-heist/
 ```
 
-**Final `ls -l bank-heist/`:**
+**Final output:**
+
 ```
--rw-r--r-- 1 tokyo   vault-team  0  access-codes.txt
--rw-r--r-- 1 berlin  tech-team   0  blueprints.pdf
--rw-r--r-- 1 nairobi vault-team  0  escape-plan.txt
+-rw-rw-r-- 1 tokyo   vault-team 0 Mar 10 access-codes.txt
+-rw-rw-r-- 1 berlin  tech-team  0 Mar 10 blueprints.pdf
+-rw-rw-r-- 1 nairobi vault-team 0 Mar 10 escape-plan.txt
 ```
 
-Each file has a different owner and group — exactly as required ✅
+Each file has a **different owner and different group** — exactly as required ✅
 
 ---
 
-## Commands Reference Used Today
+## Key Commands Reference
 
 ```bash
-# View ownership
+# View ownership of a file
 ls -l filename
-ls -lR directory/        # recursive view
+
+# View ownership of a directory itself (not contents)
+ls -ld dirname/
+
+# View ownership recursively (directory + all contents)
+ls -lR dirname/
 
 # Change owner only
 sudo chown newowner filename
@@ -197,29 +293,56 @@ sudo chgrp newgroup filename
 # Change both owner and group (one command)
 sudo chown owner:group filename
 
-# Change group only via chown
+# Change only group using chown (note the colon before group)
 sudo chown :groupname filename
 
-# Recursive change
+# Recursive change – applies to directory + everything inside
 sudo chown -R owner:group directory/
 
-# Create user
+# Create a new user (needed before chown to that user)
 sudo useradd username
 
-# Create group
+# Create a new group (needed before chgrp/chown to that group)
 sudo groupadd groupname
 ```
 
 ---
 
-## What I Learned
+## Ownership Changes Summary
 
-1. **Owner vs Group are separate concepts** — `chown` changes the owner, `chgrp` changes the group. You can change both at once with `chown owner:group`. This separation allows fine-grained access control: one user owns a file, but a whole team (group) can be given read access.
-
-2. **`-R` flag is powerful — and dangerous** — Recursive `chown -R` changes ownership of everything inside a directory in one shot. In production, running this on the wrong path (like `/etc` or `/var`) can break system services instantly. Always double-check the path before using `-R`.
-
-3. **Users and groups must exist before you use them** — `chown tokyo file.txt` will fail with `invalid user` if `tokyo` hasn't been created yet. In real DevOps workflows, user/group provisioning (via Ansible, Terraform, or cloud IAM) always comes before file ownership is assigned.
+| File / Dir                    | Initial       | Final                  |
+| ----------------------------- | ------------- | ---------------------- |
+| `devops-file.txt`             | `rajen:rajen` | `berlin:rajen`         |
+| `team-notes.txt`              | `rajen:rajen` | `rajen:heist-team`     |
+| `project-config.yaml`         | `rajen:rajen` | `professor:heist-team` |
+| `app-logs/`                   | `rajen:rajen` | `berlin:heist-team`    |
+| `heist-project/` (all)        | `root:root`   | `professor:planners`   |
+| `bank-heist/access-codes.txt` | `rajen:rajen` | `tokyo:vault-team`     |
+| `bank-heist/blueprints.pdf`   | `rajen:rajen` | `berlin:tech-team`     |
+| `bank-heist/escape-plan.txt`  | `rajen:rajen` | `nairobi:vault-team`   |
 
 ---
 
-*Day 11 of #90DaysOfDevOps | #DevOpsKaJosh | #TrainWithShubham*
+## What I Learned
+
+1. **Owner and Group are independent** — `chown` changes owner, `chgrp` changes group. But `chown owner:group` can do both at once. This design lets Linux give fine-grained access: one user owns a file, while a whole team shares read access through group membership — without giving everyone full ownership.
+
+2. **`-R` is powerful but dangerous** — Recursive `chown -R` is a one-shot command to change ownership across hundreds of files instantly. In production this is essential (e.g., deploying apps), but pointing it at the wrong path can silently break system services. Always verify the path before hitting Enter.
+
+3. **Users and groups must exist before you assign them** — `chown tokyo file` fails with `invalid user` if `tokyo` doesn't exist yet. In real DevOps pipelines, user/group provisioning (via Ansible, cloud-init, or Terraform) always happens in the infrastructure layer _before_ application deployment touches file ownership.
+
+---
+
+## Why This Matters for DevOps
+
+| Real Scenario      | Ownership Setup                                         |
+| ------------------ | ------------------------------------------------------- |
+| Web server files   | `www-data:www-data` — only the web process can write    |
+| CI/CD artifacts    | `jenkins:developers` — Jenkins writes, devs can read    |
+| App config files   | `app-user:ops-team` — app reads, ops team can edit      |
+| Log files          | `app-user:developers` — app writes, devs can tail       |
+| Shared project dir | `root:dev-team` with `775` — whole team can collaborate |
+
+---
+
+_Day 11 of #90DaysOfDevOps | #DevOpsKaJosh | #TrainWithShubham_

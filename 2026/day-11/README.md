@@ -11,7 +11,7 @@ Master file and directory ownership in Linux.
 ---
 
 ## Expected Output
-- A markdown file: `day-11-file-ownership.md`
+- A markdown file: `day-11-file-ownership.md`ls sssssssssss
 - Screenshots showing ownership changes
 
 ---
