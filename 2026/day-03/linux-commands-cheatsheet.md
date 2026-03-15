@@ -1,4 +1,19 @@
+<<<<<<< HEAD
 ## 1. Process Management Commands
+=======
+# Day 03 – Linux Command Cheat Sheet (DevOps Toolkit)
+
+This cheat sheet contains frequently used Linux commands for:
+- Process management
+- File system operations
+- Networking troubleshooting
+
+This is a reusable command toolkit for daily DevOps work.
+
+---
+
+## 1. Process Management
+>>>>>>> d8e56fa (day 03: linux-cheat-sheet)
 
 - `ps aux` – Show all running processes with CPU and memory usage  
 - `ps a` – Show processes associated with the terminal  
@@ -17,9 +32,13 @@
 ## 2. File System Commands
 
 - `pwd` – Show current working directory  
+<<<<<<< HEAD
 - `ls` – List files and directories  
 - `ls -l` – List files with permissions and ownership  
 - `ls -a` – List all files including hidden files (`.` files)  
+=======
+- `ls -l` – List files with permissions and ownership  
+>>>>>>> d8e56fa (day 03: linux-cheat-sheet)
 - `ls -lh` – List files with human-readable sizes  
 - `cd /path` – Change directory  
 - `mkdir devops` – Create a directory  
@@ -33,6 +52,7 @@
 
 ---
 
+<<<<<<< HEAD
 ## 3. Pipe Symbol (`|`) – Very Important
 
 - `|` is called a **pipe**
@@ -51,6 +71,9 @@
 ---
 
 ## 4. Networking Troubleshooting Commands
+=======
+## 3. Networking Troubleshooting
+>>>>>>> d8e56fa (day 03: linux-cheat-sheet)
 
 - `ip addr` – Display IP addresses and interfaces  
 - `ip route` – Show routing table  
@@ -61,6 +84,7 @@
 
 ---
 
+<<<<<<< HEAD
 ## 5. Log Checking Commands (Very Important for DevOps)
 
 ### Application & System Logs
@@ -79,6 +103,9 @@
 ---
 
 ## 6. Help & Documentation
+=======
+## 4. Help & Documentation
+>>>>>>> d8e56fa (day 03: linux-cheat-sheet)
 
 - `man <command>` – Open official manual page  
 - `<command> --help` – Quick usage reference  
@@ -87,6 +114,7 @@
 
 ## Why This Matters for DevOps
 
+<<<<<<< HEAD
 - Logs are the **first place to check during incidents**
 - Pipes help filter large outputs quickly
 - These commands reduce debugging time
@@ -94,3 +122,11 @@
 
 Mastering this toolkit makes Linux predictable and controllable.  
 
+=======
+- Faster troubleshooting during incidents  
+- Better understanding of system health  
+- Reduced downtime in production  
+- Strong foundation for automation and scripting  
+
+Mastering these commands makes Linux predictable and controllable.
+>>>>>>> d8e56fa (day 03: linux-cheat-sheet)
