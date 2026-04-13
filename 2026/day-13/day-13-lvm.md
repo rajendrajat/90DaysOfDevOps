@@ -76,6 +76,7 @@ df -h /mnt/app-data
 **Screenshot:** `[Add screenshot of mkfs.ext4, mount, and df -h output]`
 <img width="706" height="596" alt="image" src="https://github.com/user-attachments/assets/543cc8f0-f7ca-4454-9ccb-0e84e1e1184c" />
 <img width="1627" height="905" alt="image" src="https://github.com/user-attachments/assets/f2269e84-f516-478c-bc9f-4844b7a497f5" />
+<img width="961" height="515" alt="image" src="https://github.com/user-attachments/assets/39be6de4-5c64-499a-84a8-57b10625d457" />
 
 ---
 
